@@ -1,4 +1,4 @@
-# webpack-handlebars-static-loader
+# webpack-handlebars-loader
 
 used in webpack-handlebars-static-file-generator
 
