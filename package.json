@@ -16,6 +16,10 @@
     "url": "git+https://github.com/francbelak/webpack-handlebars-loader.git"
   },
   "author": "Franc Belak",
+  "contributors": [
+    "Christian Tschugg <iantsch@gmail.com> (https://mbt.wien/)",
+    "Franc Belak <franc.belak@gmail.com> (http://francbelak.com/)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/francbelak/webpack-handlebars-loader/issues"
