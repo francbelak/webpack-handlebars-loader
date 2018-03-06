@@ -25,20 +25,20 @@ module.exports = function(source, map) {
   if (!initializedPartials) {
     //TODO: implement recursive readdir for nested partials support
     //TODO: implement watch partial changes and rebuild
-    const partials = fs.readdirSync(path.join(__dirname, options['partials']));
+    const partials = fs.readdirSync(options['partials']);
     const partialsFolderName = options['partials'].substr(options['partials'].lastIndexOf('/') + 1);
     const partialsPath = `${options['partials']}/`;
     partials.forEach((partial) => {
       //Remove *.handlebars *.hbs in key
       const partialKey = removeExtension(partial);
-      Handlebars.registerPartial(`${partialsFolderName}/${partialKey}`, fs.readFileSync(path.join(__dirname, partialsPath + partial), 'utf8'));
+      Handlebars.registerPartial(`${partialsFolderName}/${partialKey}`, fs.readFileSync(path.join(partialsPath + partial), 'utf8'));
     });
     initializedPartials = true;
   }
 
   //TODO: implement watch data changes and rebuild
   if (!initializedData) {
-    const data = fs.readdirSync(path.join(__dirname, options['data']));
+    const data = fs.readdirSync(path.join(options['data']));
     data.forEach((data) => {
       if (data.indexOf('_') === 0) {
         return;
@@ -54,7 +54,7 @@ module.exports = function(source, map) {
       languagePath = '';
     }
     const relativePath = `${options['outputpath']}${languagePath}${removeExtension(this.resourcePath.substr(this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length))}.html`;
-    const data = JSON.parse(fs.readFileSync(path.join(__dirname, options['data'], `${language}.json`), 'utf8'));
+    const data = JSON.parse(fs.readFileSync(path.join(options['data'], `${language}.json`), 'utf8'));
     //TODO: implement lodash merge with _.data.json files
     data.absRefPrefix = getRelativePath(relativePath);
     const template = Handlebars.compile(source);
