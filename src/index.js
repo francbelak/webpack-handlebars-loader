@@ -1,129 +1,39 @@
-const loaderUtils = require('loader-utils');
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
-const Handlebars = require('handlebars');
-const merge = require('lodash.merge');
+import { getOptions } from 'loader-utils';
+import { defaultNamer, defaultHelperNamer, getRelativePath, removeExtension } from './utils/utils';
+import Handlebars from 'handlebars';
+import Helpers from './utils/helpers';
+import merge from 'lodash.merge';
+import Partials from './utils/partials';
+import Data from './utils/data';
 
 let initializedPartials = false;
 let initializedHelpers = false;
 let initializedData = false;
-const _data = [];
-const languages = [];
 
-function removeExtension(path) {
-  return path.slice(0, path.lastIndexOf('.'));
-}
-
-function getRelativePath(path) {
-  const deep = path.split('/').length - 2;
-  const rootLayer = 0;
-  if (deep === rootLayer) {
-    return './';
-  }
-  return '../'.repeat(deep);
-}
-
-function loadPartials(context, options){
-  if (!initializedPartials) {
-    let partials;
-    if (typeof options.partials === 'string') {
-      partials = [options.partials];
-    } else {
-      partials = options.partials;
-    }
-    partials.forEach(partialGlob => {
-      glob.sync(partialGlob).forEach(partial => {
-        const partialName = options.partialNamer.call(context, partial);
-        const partialPath = path.resolve(partial);
-        context.addDependency(partialPath);
-        Handlebars.registerPartial(partialName, fs.readFileSync(partialPath, 'utf-8'));
-      });
-    });
-    initializedPartials = true;
-  }
-}
-
-function loadHelpers(context, options) {
-  if (!initializedHelpers) {
-    let helpers;
-    if (typeof options.helpers === 'string') {
-      helpers = [options.helpers];
-    }
-    else {
-      helpers = options.helpers;
-    }
-    helpers.forEach(helperGlob => {
-      glob.sync(helperGlob).forEach(helper => {
-        const helperName = options.helperNamer.call(context, helper);
-        const helperPath = path.resolve(helper);
-        context.addDependency(helperPath);
-        delete require.cache[require.resolve(helperPath)];
-        Handlebars.registerHelper(helperName, require(helperPath))
-      })
-    });
-    initializedHelpers = true;
-  }
-}
-
-function loadData(context, options) {
-  if (!initializedData) {
-    let dataFiles;
-    if (typeof options.data === 'string') {
-      dataFiles = [options.data];
-    }
-    else {
-      dataFiles = options.data;
-    }
-    dataFiles.forEach(dataGlob => {
-      glob.sync(dataGlob).forEach(dataObj => {
-        const dataName = removeExtension(dataObj.substr(dataObj.lastIndexOf('/') + 1));
-        const dataPath = path.resolve(dataObj);
-        context.addDependency(dataPath);
-        if (dataName.indexOf('_') === 0) {
-          _data.push(JSON.parse(fs.readFileSync(dataObj)));
-          return;
-        }
-        languages.push({
-          name: dataName,
-          data: JSON.parse(fs.readFileSync(dataObj, 'utf8'))
-        });
-      })
-    });
-    initializedData = true;
-  }
-}
-
-function defaultNamer(file) {
-  const fileStart = file.lastIndexOf('/') + 1;
-  const basePath = file.substr(0, fileStart - 1);
-  const folderStart = basePath.lastIndexOf('/') + 1;
-  const fileName = file.substr(fileStart);
-  const folderName = basePath.substr(folderStart);
-  return removeExtension(`${folderName}/${fileName}`);
-}
-
-function defaultHelperNamer(file) {
-  return defaultNamer(file).replace('.helper', '');
-}
+let _data = [];
+let languages = [];
 
 module.exports = function(source, map) {
-
   const options = Object.assign({}, {
     partialNamer: defaultNamer,
     helperNamer: defaultHelperNamer
-  }, loaderUtils.getOptions(this));
+  }, getOptions(this));
 
-  if (options.partials) {
-    loadPartials(this, options);
+  if (options.partials && !initializedPartials) {
+    const partials = new Partials(Handlebars, options);
+    initializedPartials = partials.initialized;
   }
 
-  if (options.helpers) {
-    loadHelpers(this, options);
+  if (options.helpers && !initializedHelpers) {
+    const helpers = new Helpers(Handlebars, options);
+    initializedPartials = helpers.initialized;
   }
 
-  if (options.data) {
-    loadData(this, options);
+  if (options.data && !initializedData) {
+    const data = new Data(Handlebars, options);
+    initializedData = data.initialized;
+    _data = data.data;
+    languages = data.languages;
   }
 
   languages.forEach((language)=>{
