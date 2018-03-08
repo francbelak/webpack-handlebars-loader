@@ -3,12 +3,8 @@ function defaultHelperNamer(file) {
 }
 
 function defaultNamer(file) {
-  const fileStart = file.lastIndexOf('/') + 1;
-  const basePath = file.substr(0, fileStart - 1);
-  const folderStart = basePath.lastIndexOf('/') + 1;
-  const fileName = file.substr(fileStart);
-  const folderName = basePath.substr(folderStart);
-  return removeExtension(`${folderName}/${fileName}`);
+  const segments = file.split('/');
+  return removeExtension(`${segments[segments.length - 2]}/${segments[segments.length - 1]}`);
 }
 
 function getRelativePath(path) {
