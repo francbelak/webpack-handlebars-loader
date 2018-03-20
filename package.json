@@ -1,6 +1,6 @@
 {
   "name": "webpack-handlebars-loader",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Handlebars loader for webpack-handlebars-static-file-generator",
   "main": "dist/index.js",
   "devDependencies": {
