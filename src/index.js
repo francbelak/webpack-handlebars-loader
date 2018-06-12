@@ -60,14 +60,14 @@ module.exports = function(source, map) {
     /**
      * ignore absRefPrefix if files are not being written but loaded with JS
      */
-    if (!options.extract) {
+    if (options.extract === false) {
       data.absRefPrefix = './';
     }
 
     const template = Handlebars.compile(source);
     const result = template(data);
 
-    if(!options.extract) {
+    if(options.extract === false) {
       if (!resultObject[languageName]) {
         resultObject[languageName] = {};
       }
@@ -78,7 +78,7 @@ module.exports = function(source, map) {
     this.emitFile(relativePath, result);
   });
 
-  if (!options.extract) {
+  if (options.extract === false) {
     return resultObject;
   }
 
