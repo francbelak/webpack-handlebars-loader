@@ -33,6 +33,13 @@ var initializedData = false;
 var _data = [];
 var languages = [];
 
+/**
+  * if options.extract is set to false --> object with markup will be returned
+  * used if file is not being written (static) - markup can be loaded via JS
+  * @type {object}
+*/
+var resultObject = {};
+
 module.exports = function (source, map) {
   var _this = this;
 
@@ -59,22 +66,45 @@ module.exports = function (source, map) {
   }
 
   languages.forEach(function (language) {
-    var languagePath = `/${language.name}`;
-    if (language.name === options['rootData']) {
+    var languageName = language.name;
+    var languagePath = `/${languageName}`;
+    if (languageName === options['rootData']) {
       languagePath = '';
     }
 
     var data = _data.reduce(function (reducedData, dataObject) {
       return (0, _lodash2.default)(reducedData, dataObject);
     }, {});
-    var relativePath = `${options['outputpath']}${languagePath}${(0, _utils.removeExtension)(_this.resourcePath.substr(_this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length))}.html`;
+    var routeName = (0, _utils.removeExtension)(_this.resourcePath.substr(_this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length));
+    var relativePath = `${options['outputpath']}${languagePath}${routeName}.html`;
     data = (0, _lodash2.default)(data, language.data);
 
     data.absRefPrefix = (0, _utils.getRelativePath)(relativePath);
+
+    /**
+     * ignore absRefPrefix if files are not being written but loaded with JS
+     */
+    if (!options.extract) {
+      data.absRefPrefix = './';
+    }
+
     var template = _handlebars2.default.compile(source);
     var result = template(data);
+
+    if (!options.extract) {
+      if (!resultObject[languageName]) {
+        resultObject[languageName] = {};
+      }
+      resultObject[languageName][routeName] = result;
+      return;
+    }
+
     _this.emitFile(relativePath, result);
   });
+
+  if (!options.extract) {
+    return resultObject;
+  }
 
   //TODO: use better return value for testing
   return 'true';

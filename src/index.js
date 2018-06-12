@@ -13,6 +13,13 @@ let initializedData = false;
 let _data = [];
 let languages = [];
 
+/**
+  * if options.extract is set to false --> object with markup will be returned
+  * used if file is not being written (static) - markup can be loaded via JS
+  * @type {object}
+*/
+let resultObject = {};
+
 module.exports = function(source, map) {
   const options = Object.assign({}, {
     partialNamer: defaultNamer,
@@ -37,20 +44,43 @@ module.exports = function(source, map) {
   }
 
   languages.forEach((language)=>{
-    let languagePath = `/${language.name}`;
-    if (language.name === options['rootData']) {
+    const languageName = language.name;
+    let languagePath = `/${languageName}`;
+    if (languageName === options['rootData']) {
       languagePath = '';
     }
 
     let data = _data.reduce((reducedData, dataObject) => merge(reducedData, dataObject), {});
-    const relativePath = `${options['outputpath']}${languagePath}${removeExtension(this.resourcePath.substr(this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length))}.html`;
+    const routeName = removeExtension(this.resourcePath.substr(this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length));
+    const relativePath = `${options['outputpath']}${languagePath}${routeName}.html`;
     data = merge(data, language.data);
 
     data.absRefPrefix = getRelativePath(relativePath);
+
+    /**
+     * ignore absRefPrefix if files are not being written but loaded with JS
+     */
+    if (!options.extract) {
+      data.absRefPrefix = './';
+    }
+
     const template = Handlebars.compile(source);
     const result = template(data);
+
+    if(!options.extract) {
+      if (!resultObject[languageName]) {
+        resultObject[languageName] = {};
+      }
+      resultObject[languageName][routeName] = result;
+      return;
+    }
+
     this.emitFile(relativePath, result);
   });
+
+  if (!options.extract) {
+    return resultObject;
+  }
 
   //TODO: use better return value for testing
   return 'true';
