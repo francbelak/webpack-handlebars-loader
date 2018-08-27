@@ -56,6 +56,7 @@ module.exports = function(source, map) {
     data = merge(data, language.data);
 
     data.absRefPrefix = getRelativePath(relativePath);
+    data.language = languageName;
 
     /**
      * ignore absRefPrefix if files are not being written but loaded with JS

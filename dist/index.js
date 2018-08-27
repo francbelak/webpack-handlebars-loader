@@ -80,6 +80,7 @@ module.exports = function (source, map) {
     data = (0, _lodash2.default)(data, language.data);
 
     data.absRefPrefix = (0, _utils.getRelativePath)(relativePath);
+    data.language = languageName;
 
     /**
      * ignore absRefPrefix if files are not being written but loaded with JS
