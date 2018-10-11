@@ -9,6 +9,10 @@ var _helpers2 = _interopRequireDefault(_helpers);
 
 var _utils = require('./utils');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32,16 +36,6 @@ var HandlebarsMock = function () {
   return HandlebarsMock;
 }();
 
-test('Test Helper init', function () {
-  var handlebarsMock = new HandlebarsMock();
-  var helper = new _helpers2.default(handlebarsMock, {
-    helpers: 'src/testfiles/helpers/helperA.js',
-    helperNamer: _utils.defaultNamer
-  });
-
-  expect(helper.initialized).toEqual(true);
-});
-
 test('Test Helper registration for options passed as string', function () {
   var handlebarsMock = new HandlebarsMock();
   new _helpers2.default(handlebarsMock, {
@@ -61,4 +55,24 @@ test('Test Helper registration for options passed as array', function () {
 
   expect(handlebarsMock.helpers[0].helpername).toEqual('helpers/helperA');
   expect(handlebarsMock.helpers[1].helpername).toEqual('helpers/helperB');
+});
+
+test('Test adding partials dependencies', function () {
+  var handlebarsMock = new HandlebarsMock();
+  var loaderMock = {
+    dependencies: [],
+    dependency: function dependency(_dependency) {
+      this.dependencies.push(_dependency);
+    }
+  };
+
+  var helpers = new _helpers2.default(handlebarsMock, {
+    helpers: ['src/testfiles/helpers/helperA.js', 'src/testfiles/helpers/helperB.js'],
+    helperNamer: _utils.defaultNamer
+  }, loaderMock);
+
+  helpers.addDependencies();
+
+  expect(loaderMock.dependencies[0]).toEqual(_path2.default.resolve('src/testfiles/helpers/helperA.js'));
+  expect(loaderMock.dependencies[1]).toEqual(_path2.default.resolve('src/testfiles/helpers/helperB.js'));
 });

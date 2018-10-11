@@ -26,10 +26,6 @@ var _data3 = _interopRequireDefault(_data2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var initializedPartials = false;
-var initializedHelpers = false;
-var initializedData = false;
-
 var _data = [];
 var languages = [];
 
@@ -48,19 +44,19 @@ module.exports = function (source, map) {
     helperNamer: _utils.defaultHelperNamer
   }, (0, _loaderUtils.getOptions)(this));
 
-  if (options.partials && !initializedPartials) {
-    var partials = new _partials2.default(_handlebars2.default, options);
-    initializedPartials = partials.initialized;
+  if (options.partials) {
+    var partials = new _partials2.default(_handlebars2.default, options, this);
+    partials.addDependencies();
   }
 
-  if (options.helpers && !initializedHelpers) {
-    var helpers = new _helpers2.default(_handlebars2.default, options);
-    initializedPartials = helpers.initialized;
+  if (options.helpers) {
+    var helpers = new _helpers2.default(_handlebars2.default, options, this);
+    helpers.addDependencies();
   }
 
-  if (options.data && !initializedData) {
-    var data = new _data3.default(_handlebars2.default, options);
-    initializedData = data.initialized;
+  if (options.data) {
+    var data = new _data3.default(_handlebars2.default, options, this);
+    data.addDependencies();
     _data = data.data;
     languages = data.languages;
   }

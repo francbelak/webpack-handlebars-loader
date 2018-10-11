@@ -6,10 +6,6 @@ import merge from 'lodash.merge';
 import Partials from './utils/partials';
 import Data from './utils/data';
 
-let initializedPartials = false;
-let initializedHelpers = false;
-let initializedData = false;
-
 let _data = [];
 let languages = [];
 
@@ -26,19 +22,19 @@ module.exports = function(source, map) {
     helperNamer: defaultHelperNamer
   }, getOptions(this));
 
-  if (options.partials && !initializedPartials) {
-    const partials = new Partials(Handlebars, options);
-    initializedPartials = partials.initialized;
+  if (options.partials) {
+    const partials = new Partials(Handlebars, options, this);
+    partials.addDependencies();
   }
 
-  if (options.helpers && !initializedHelpers) {
-    const helpers = new Helpers(Handlebars, options);
-    initializedPartials = helpers.initialized;
+  if (options.helpers) {
+    const helpers = new Helpers(Handlebars, options, this);
+    helpers.addDependencies();
   }
 
-  if (options.data && !initializedData) {
-    const data = new Data(Handlebars, options);
-    initializedData = data.initialized;
+  if (options.data) {
+    const data = new Data(Handlebars, options, this);
+    data.addDependencies();
     _data = data.data;
     languages = data.languages;
   }
