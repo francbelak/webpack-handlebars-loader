@@ -1,28 +1,27 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _fs = _interopRequireDefault(require("fs"));
 
-var _fs = require('fs');
+var _glob = _interopRequireDefault(require("glob"));
 
-var _fs2 = _interopRequireDefault(_fs);
-
-var _glob = require('glob');
-
-var _glob2 = _interopRequireDefault(_glob);
-
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
+var _path = _interopRequireDefault(require("path"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Partials = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Partials =
+/*#__PURE__*/
+function () {
   function Partials(Handlebars, options, loaderContext) {
     _classCallCheck(this, Partials);
 
@@ -34,22 +33,24 @@ var Partials = function () {
     }
 
     this.partials.forEach(function (partialGlob) {
-      _glob2.default.sync(partialGlob).forEach(function (partial) {
+      _glob.default.sync(partialGlob).forEach(function (partial) {
         var partialName = options.partialNamer(partial);
-        var partialPath = _path2.default.resolve(partial);
-        Handlebars.registerPartial(partialName, _fs2.default.readFileSync(partialPath, 'utf-8'));
+
+        var partialPath = _path.default.resolve(partial);
+
+        Handlebars.registerPartial(partialName, _fs.default.readFileSync(partialPath, 'utf-8'));
       });
     });
   }
 
   _createClass(Partials, [{
-    key: 'addDependencies',
+    key: "addDependencies",
     value: function addDependencies() {
       var _this = this;
 
       this.partials.forEach(function (partialGlob) {
-        _glob2.default.sync(partialGlob).forEach(function (partial) {
-          _this.loaderContext.dependency(_path2.default.resolve(partial));
+        _glob.default.sync(partialGlob).forEach(function (partial) {
+          _this.loaderContext.dependency(_path.default.resolve(partial));
         });
       });
     }
