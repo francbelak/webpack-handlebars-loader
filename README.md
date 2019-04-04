@@ -12,3 +12,4 @@ used in webpack-handlebars-static-file-generator
 |`data`| Folder for data.json files. Currently files starting with _ will be ignored in path structure |
 |`rootData`| Root file for data - will be generated without subfolder |
 |`extract`| Return markup as Object instead of writing it to file |
+|`extension`| Append extension to output filename, defaults to `.html` |

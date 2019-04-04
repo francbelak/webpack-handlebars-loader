@@ -20,9 +20,20 @@ function removeExtension(path) {
   return path.slice(0, path.lastIndexOf('.'));
 }
 
+function getExtension(extension = '') {
+  if (typeof extension !== 'string' || extension === '') {
+    return '';
+  }
+  if (extension.substr(0,1) !== '.') {
+    extension = `.${extension}`;
+  }
+  return extension;
+}
+
 export {
   defaultHelperNamer,
   defaultNamer,
   getRelativePath,
-  removeExtension
+  removeExtension,
+  getExtension
 };

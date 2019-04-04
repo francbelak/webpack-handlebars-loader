@@ -18,3 +18,9 @@ test('Test defaultNamer to use folder and name', function () {
 test('Remove helper string from name in register by default', function () {
   expect((0, _utils.defaultHelperNamer)('src/js/helpers/concat.helper.js')).toEqual('helpers/concat');
 });
+test('Get optional file extension', function () {
+  expect((0, _utils.getExtension)(false)).toEqual('');
+  expect((0, _utils.getExtension)({})).toEqual('');
+  expect((0, _utils.getExtension)('.html')).toEqual('.html');
+  expect((0, _utils.getExtension)('html')).toEqual('.html');
+});

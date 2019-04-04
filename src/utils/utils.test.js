@@ -1,5 +1,5 @@
 /* global expect */
-import { removeExtension, getRelativePath, defaultNamer, defaultHelperNamer } from './utils.js';
+import { removeExtension, getRelativePath, defaultNamer, defaultHelperNamer, getExtension } from './utils.js';
 
 test('Remove JS extension from file', () => {
   expect(removeExtension('dist/js/main.js')).toEqual('dist/js/main');
@@ -19,4 +19,11 @@ test('Test defaultNamer to use folder and name', () => {
 
 test('Remove helper string from name in register by default', () => {
   expect(defaultHelperNamer('src/js/helpers/concat.helper.js')).toEqual('helpers/concat');
+});
+
+test('Get optional file extension', () => {
+  expect(getExtension(false)).toEqual('');
+  expect(getExtension({})).toEqual('');
+  expect(getExtension('.html')).toEqual('.html');
+  expect(getExtension('html')).toEqual('.html');
 });
