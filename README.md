@@ -1,4 +1,4 @@
-[![Build Actions Status](https://github.com/francbelak/rwebpack-handlebars-loader/workflows/master/badge.svg)](https://github.com/francbelak/rwebpack-handlebars-loader/actions)
+[![Build Actions Status](https://github.com/francbelak/webpack-handlebars-loader/workflows/master/badge.svg)](https://github.com/francbelak/webpack-handlebars-loader/actions)
 
 | Statements                  | Branches                | Functions                 | Lines                |
 | --------------------------- | ----------------------- | ------------------------- | -------------------- |
