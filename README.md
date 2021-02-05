@@ -1,3 +1,9 @@
+[![Build Actions Status](https://github.com/francbelak/rwebpack-handlebars-loader/workflows/master/badge.svg)](https://github.com/francbelak/rwebpack-handlebars-loader/actions)
+
+| Statements                  | Branches                | Functions                 | Lines                |
+| --------------------------- | ----------------------- | ------------------------- | -------------------- |
+| ![Statements](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg) | ![Functions](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg) | ![Lines](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)    |
+
 # webpack-handlebars-loader
 
 used in webpack-handlebars-static-file-generator

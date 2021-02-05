@@ -7,6 +7,7 @@
     "@babel/cli": "^7.12.13",
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
+    "istanbul-badges-readme": "^1.2.0",
     "jest": "^24.9.0",
     "path": "^0.12.7"
   },
@@ -16,7 +17,8 @@
     "lodash.merge": "^4.6.2"
   },
   "scripts": {
-    "test": "jest --coverage --collectCoverageFrom=src/utils/**/*",
+    "test": "jest --coverage --coverageReporters json-summary --collectCoverageFrom=src/utils/**/*",
+    "badges": "istanbul-badges-readme",
     "build": "babel src -d dist --copy-files",
     "coverage": "jest --coverage"
   },
