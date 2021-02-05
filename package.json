@@ -4,9 +4,9 @@
   "description": "Handlebars loader for webpack-handlebars-static-file-generator",
   "main": "dist/index.js",
   "devDependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/cli": "^7.12.13",
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
     "jest": "^24.9.0",
     "path": "^0.12.7"
   },
