@@ -31,7 +31,8 @@ module.exports = function (source, map) {
 
   var options = Object.assign({}, {
     partialNamer: _utils.defaultNamer,
-    helperNamer: _utils.defaultHelperNamer
+    helperNamer: _utils.defaultHelperNamer,
+    extension: '.html'
   }, (0, _loaderUtils.getOptions)(this));
 
   if (options.partials) {
@@ -64,7 +65,7 @@ module.exports = function (source, map) {
     }, {});
 
     var routeName = (0, _utils.removeExtension)(_this.resourcePath.substr(_this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length));
-    var relativePath = "".concat(options['outputpath']).concat(languagePath).concat(routeName, ".html");
+    var relativePath = "".concat(options['outputpath']).concat(languagePath).concat(routeName).concat((0, _utils.getExtension)(options.extension));
     data = (0, _lodash.default)(data, language.data);
     data.absRefPrefix = (0, _utils.getRelativePath)(relativePath);
     data.language = languageName;

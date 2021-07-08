@@ -1,5 +1,5 @@
 import { getOptions } from 'loader-utils';
-import { defaultNamer, defaultHelperNamer, getRelativePath, removeExtension } from './utils/utils';
+import { defaultNamer, defaultHelperNamer, getRelativePath, removeExtension, getExtension } from './utils/utils';
 import Handlebars from 'handlebars';
 import Helpers from './utils/helpers';
 import merge from 'lodash.merge';
@@ -19,7 +19,8 @@ let resultObject = {};
 module.exports = function(source, map) {
   const options = Object.assign({}, {
     partialNamer: defaultNamer,
-    helperNamer: defaultHelperNamer
+    helperNamer: defaultHelperNamer,
+    extension: '.html'
   }, getOptions(this));
 
   if (options.partials) {
@@ -48,7 +49,7 @@ module.exports = function(source, map) {
 
     let data = _data.reduce((reducedData, dataObject) => merge(reducedData, dataObject), {});
     const routeName = removeExtension(this.resourcePath.substr(this.resourcePath.indexOf(options['relativePathTo']) + options['relativePathTo'].length));
-    const relativePath = `${options['outputpath']}${languagePath}${routeName}.html`;
+    const relativePath = `${options['outputpath']}${languagePath}${routeName}${getExtension(options.extension)}`;
     data = merge(data, language.data);
 
     data.absRefPrefix = getRelativePath(relativePath);

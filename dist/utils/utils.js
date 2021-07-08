@@ -7,6 +7,7 @@ exports.defaultHelperNamer = defaultHelperNamer;
 exports.defaultNamer = defaultNamer;
 exports.getRelativePath = getRelativePath;
 exports.removeExtension = removeExtension;
+exports.getExtension = getExtension;
 
 function defaultHelperNamer(file) {
   return defaultNamer(file).replace('.helper', '');
@@ -30,4 +31,18 @@ function getRelativePath(path) {
 
 function removeExtension(path) {
   return path.slice(0, path.lastIndexOf('.'));
+}
+
+function getExtension() {
+  var extension = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+  if (typeof extension !== 'string' || extension === '') {
+    return '';
+  }
+
+  if (extension.substr(0, 1) !== '.') {
+    extension = ".".concat(extension);
+  }
+
+  return extension;
 }
